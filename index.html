@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>业余无线电台BD4UOG通联日志</title>
+    <style>
+        /* Reset and base styles */
+        * { box-sizing: border-box; }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        header {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 1.5rem 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 80%;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        .profile {
+            background-color: #ffffff;
+            border: 1px solid #e0e6ed;
+            border-radius: 6px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .profile h2 { margin-top: 0; }
+        .profile ul { list-style: none; padding: 0; margin: 0; }
+        .profile li { margin-bottom: 0.5rem; }
+        .profile li strong { display: inline-block; width: 130px; }
+        .log h2 { margin-top: 0; margin-bottom: 0.5rem; }
+        .table-responsive { overflow-x: auto; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+        th, td {
+            padding: 0.625rem 0.75rem;
+            border-bottom: 1px solid #e0e6ed;
+            text-align: left;
+            white-space: nowrap;
+        }
+        th {
+            background-color: #3498db;
+            color: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            cursor: pointer;
+        }
+        tr:nth-child(even) { background-color: #f9fcff; }
+        tr:hover { background-color: #eef5ff; }
+        .pagination {
+            text-align: center;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+        }
+        .pagination button {
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            border: none;
+            border-radius: 4px;
+            background-color: #3498db;
+            color: #ffffff;
+            cursor: pointer;
+        }
+        .pagination button:hover { background-color: #2c3e50; }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.875rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>业余无线电台 BD4UOG 通联日志</h1>
+    </header>
+    <div class="container">
+        <section class="profile">
+            <h2>个人资料</h2>
+            <ul>
+                <li><strong>CALL:</strong> BD4UOG</li>
+                <li><strong>CLASS:</strong> B类</li>
+                <li><strong>OPR:</strong> BD4UOG</li>
+                
+                <li><strong>GRID:</strong> OM92jb</li>
+                
+            </ul>
+        </section>
+        <section class="log">
+            <h2>通联日志</h2>
+            <div class="table-responsive">
+                <table id="logTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">日期 DATE</th>
+                <th onclick="sortTable(1)">时间 TIME</th>
+                <th onclick="sortTable(2)">呼号 CALLSIGN</th>
+                <th onclick="sortTable(3)">频率</th>
+                <th onclick="sortTable(4)">模式 MODE</th>
+                <th onclick="sortTable(5)">Sent RST</th>
+                <th onclick="sortTable(6)">Received RST</th>
+                <th onclick="sortTable(7)">Sent PWR</th>
+                <th onclick="sortTable(8)">Received PWR</th>
+                <th onclick="sortTable(9)">QTH</th>
+                <th onclick="sortTable(10)">设备 RIG</th>
+                <th onclick="sortTable(11)">天线 ANT</th>
+                <th onclick="sortTable(12)">Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                <tr><td>2024/10/5</td><td>20:57</td><td>BA4QCS</td><td>430.61</td><td>FM</td><td>59</td><td>59</td><td>5W</td><td>25W</td><td>南京市方山</td><td>森海克斯8800</td><td>RH-770</td><td></td></tr>
+                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <div class="pagination">
+            <button onclick="previousPage()">上页</button>
+            <span id="pageInfo"></span>
+            <button onclick="nextPage()">下页</button>
+        </div>
+    </div>
+    <footer>
+        <p>Copyright © 2025 中国业余无线电台BD4UOG</p>
+    </footer>
+    <script>
+        let currentPage = 1;
+        const rowsPerPage = 20;
+        function displayRows() {
+            const table = document.getElementById('logTable');
+            const rows = table.getElementsByTagName('tr');
+            const totalRows = rows.length;
+            const startRow = (currentPage - 1) * rowsPerPage + 1;
+            const endRow = startRow + rowsPerPage - 1;
+            for (let i = 1; i < totalRows; i++) {
+                if (i >= startRow && i <= endRow) {
+                    rows[i].style.display = '';
+                } else {
+                    rows[i].style.display = 'none';
+                }
+            }
+            document.getElementById('pageInfo').innerText = '显示第 ' + startRow + ' 至 ' + Math.min(endRow, totalRows - 1) + ' 项结果，共 ' + (totalRows - 1) + ' 项';
+        }
+        function nextPage() {
+            const table = document.getElementById('logTable');
+            const totalRows = table.getElementsByTagName('tr').length;
+            if (currentPage * rowsPerPage < totalRows - 1) {
+                currentPage++;
+                displayRows();
+            }
+        }
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                displayRows();
+            }
+        }
+        function sortTable(columnIndex) {
+            const table = document.getElementById('logTable');
+            let switching = true;
+            let dir = 'asc';
+            while (switching) {
+                switching = false;
+                const rows = table.rows;
+                let i;
+                for (i = 1; i < rows.length - 1; i++) {
+                    let shouldSwitch = false;
+                    const x = rows[i].getElementsByTagName('TD')[columnIndex];
+                    const y = rows[i + 1].getElementsByTagName('TD')[columnIndex];
+                    if (dir == 'asc') {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == 'desc') {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                } else {
+                    if (dir == 'asc') {
+                        dir = 'desc';
+                        switching = true;
+                    }
+                }
+            }
+            currentPage = 1;
+            displayRows();
+        }
+        displayRows();
+    </script>
+</body>
+</html>
