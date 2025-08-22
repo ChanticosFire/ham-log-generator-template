@@ -2,5 +2,7 @@
   "callsign": "BD4UOG",
   "license": "B类",
   "operator": "BD4UOG",
+  "location": "City",
   "grid": "OM92jb"
+  "email": "example@github.com"
 }
